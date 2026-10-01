@@ -1,6 +1,7 @@
 """Distributed trainer used for all CoverLock scales."""
 
 import argparse
+from contextlib import nullcontext
 import json
 import os
 import random
@@ -95,7 +96,12 @@ def main():
             iterator = iter(loader)
             clean, attacked = next(iterator)
         clean, attacked = clean.to(device), attacked.to(device)
-        with torch.autocast("cuda", torch.bfloat16, enabled=args.precision == "bf16"):
+        autocast_context = (
+            torch.autocast("cuda", dtype=torch.bfloat16)
+            if args.precision == "bf16"
+            else nullcontext()
+        )
+        with autocast_context:
             with torch.no_grad():
                 clean_features = extractor(clean)
                 attacked_features = extractor(attacked)
