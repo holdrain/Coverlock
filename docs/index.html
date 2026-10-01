@@ -92,16 +92,22 @@
 
     <section class="paper-section" id="results">
       <div class="section-kicker">05 · Results</div>
-      <h2>Transferred residuals stop verifying.</h2>
-      <p class="lead">Across CIN, MBRS, and VINE; three datasets; and multiple residual estimators, CoverLock suppresses forgery while retaining useful robustness under common image distortions.</p>
-      <div class="result-grid"><div><strong>0.243%</strong><span>GT@1 average attack success</span></div><div><strong>0.015%</strong><span>Yang et al. average attack success</span></div><div><strong>0.059%</strong><span>WmForger average attack success</span></div></div>
-      <div class="robustness-table" role="table" aria-label="Average bit accuracy under six distortions on COCO">
-        <div class="table-head" role="row"><span>Watermark model</span><span>Average BitAcc with CoverLock</span></div>
-        <div role="row"><b>CIN</b><span><i style="--width:94.6%"></i><strong>94.60%</strong></span></div>
-        <div role="row"><b>MBRS</b><span><i style="--width:89.4%"></i><strong>89.40%</strong></span></div>
-        <div role="row"><b>VINE</b><span><i style="--width:87.75%"></i><strong>87.75%</strong></span></div>
+      <h2>A better security–robustness frontier.</h2>
+      <p class="lead">CoverLock does not obtain security by simply rejecting more distorted images. It achieves a substantially more favorable trade-off: residual-transfer attacks are suppressed while genuine watermarks remain detectable after common image distortions.</p>
+
+      <div class="pareto-layout">
+        <figure class="paper-figure pareto-figure">
+          <img src="assets/security_robustness_pareto.png" alt="Security and robustness Pareto frontier comparing CoverLock with Vanilla, ConvNeXt, and MHDW binding defenses">
+          <figcaption><b>Security–robustness trade-off on COCO.</b> Security is measured by GT@1 attack success rate (ASR; lower is better), and robustness by true-positive rate under distortions (TPR; higher is better). <a href="assets/05_unified_rank_bias_asr.pdf">View the vector PDF.</a></figcaption>
+        </figure>
+        <div class="pareto-copy">
+          <div class="axis-guide"><span class="up">↑</span><p><b>More robust</b><br>Higher TPR on genuinely watermarked images after distortion.</p></div>
+          <div class="axis-guide"><span class="left">←</span><p><b>More secure</b><br>Lower success rate for transferred-residual forgeries.</p></div>
+          <div class="frontier-result"><span>Pareto frontier</span><strong>0.111% ASR<br>92.50% TPR</strong><p>CoverLock-G reaches the strongest security point while retaining high robustness.</p></div>
+          <p class="comparison"><b>Compared with MHDW:</b> CoverLock-G lowers GT@1 ASR from 11.367% to 0.111% and raises robustness TPR from 86.38% to 92.50%.</p>
+        </div>
       </div>
-      <p class="figure-caption">Average bit accuracy under Gaussian noise, brightness, blur, JPEG, contrast, and crop on COCO.</p>
+      <div class="result-note"><b>Across model scales, the conclusion is consistent.</b><span>CoverLock-S/B/L/G all occupy the low-ASR, high-TPR region, showing that content binding improves security without sacrificing—and in this comparison, while improving—robustness.</span></div>
     </section>
 
     <section class="citation-section"><h2>Citation</h2><div class="bibtex-block"><button id="copy-bibtex" type="button">Copy BibTeX</button><pre id="bibtex"><code>@misc{dong2026residual,
