@@ -101,13 +101,16 @@
           <figcaption><b>Security–robustness trade-off on COCO.</b> Security is measured by GT@1 attack success rate (ASR; lower is better), and robustness by true-positive rate under distortions (TPR; higher is better). <a href="assets/05_unified_rank_bias_asr.pdf">View the vector PDF.</a></figcaption>
         </figure>
         <div class="pareto-copy">
-          <div class="axis-guide"><span class="up">↑</span><p><b>More robust</b><br>Higher TPR on genuinely watermarked images after distortion.</p></div>
-          <div class="axis-guide"><span class="left">←</span><p><b>More secure</b><br>Lower success rate for transferred-residual forgeries.</p></div>
-          <div class="frontier-result"><span>Pareto frontier</span><strong>0.111% ASR<br>92.50% TPR</strong><p>CoverLock-G reaches the strongest security point while retaining high robustness.</p></div>
-          <p class="comparison"><b>Compared with MHDW:</b> CoverLock-G lowers GT@1 ASR from 11.367% to 0.111% and raises robustness TPR from 86.38% to 92.50%.</p>
+          <p class="result-eyebrow">Pareto frontier</p>
+          <h3>More secure and more robust.</h3>
+          <p class="result-explanation">Points toward the <b>upper left</b> are better: lower forgery success and higher detection of genuine watermarks after distortion. All CoverLock variants occupy this favorable region.</p>
+          <dl class="metric-pair">
+            <div><dt>Security ↓</dt><dd>0.111% <span>GT@1 ASR</span></dd></div>
+            <div><dt>Robustness ↑</dt><dd>92.50% <span>distortion TPR</span></dd></div>
+          </dl>
+          <p class="comparison"><b>CoverLock-G versus MHDW:</b> ASR decreases from 11.367% to 0.111%, while robustness TPR increases from 86.38% to 92.50%.</p>
         </div>
       </div>
-      <div class="result-note"><b>Across model scales, the conclusion is consistent.</b><span>CoverLock-S/B/L/G all occupy the low-ASR, high-TPR region, showing that content binding improves security without sacrificing—and in this comparison, while improving—robustness.</span></div>
     </section>
 
     <section class="citation-section"><h2>Citation</h2><div class="bibtex-block"><button id="copy-bibtex" type="button">Copy BibTeX</button><pre id="bibtex"><code>@misc{dong2026residual,
