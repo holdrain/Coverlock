@@ -56,19 +56,29 @@
           <div class="statement"><span>B</span><p><b>Average away the image content</b><br>Multi-image estimation exposes the shared component.</p></div>
           <div class="statement"><span>C</span><p><b>Transfer the shared component</b><br>The decoder accepts it on a new carrier because it never learned a strong content dependency.</p></div>
         </div>
-        <figure class="paper-figure residual-paper-figure"><img src="assets/residual-comparison.png" alt="Paper visualization of four residual estimation methods: GT at one image, GT at 100 images, Yang et al., and WmForger"><figcaption>Forgery residuals estimated by different procedures. Their appearance changes, but all target the same transferable watermark evidence.</figcaption></figure>
+        <figure class="paper-figure residual-paper-figure"><img src="assets/residualsandratios.png" alt="Comparison of residual consistency and decoder feature variation across high- and low-transferability watermark models"><figcaption><b>Residual consistency reveals the shortcut.</b> High-RT models produce nearly identical patterns across covers, and their decoder features are dominated by the message rather than the cover. Low-RT models show the opposite behavior.</figcaption></figure>
       </div>
     </section>
 
     <section class="paper-section" id="designs">
-      <div class="section-kicker">03 · Architectural evidence</div>
-      <h2>Two design choices reduce the shortcut.</h2>
-      <p class="lead">Controlled interventions show that residual transferability is not inevitable. The risk falls when the architecture forces the message to interact with local image content and when embedding adapts to each carrier.</p>
-      <div class="design-grid">
-        <article><div class="design-number">I</div><h3>Preserve spatial interaction</h3><p><b>Broadcast the message spatially and postpone global average pooling.</b> Local image features and message features continue interacting through the encoder instead of collapsing into a cover-independent global code.</p><div class="mini-diagram"><span>image features</span><i>×</i><span>message map</span><b>→ local fusion → GAP</b></div></article>
-        <article><div class="design-number">II</div><h3>Make embedding content-adaptive</h3><p><b>Let the carrier condition the embedding pattern.</b> The same message should produce different evidence on different images, making the residual harder to detach and reuse.</p><div class="mini-diagram"><span>same message</span><i>+</i><span>different image</span><b>→ different residual</b></div></article>
+      <div class="section-kicker">03 · What determines RT?</div>
+      <h2>Not the training recipe. The architecture.</h2>
+      <p class="lead">We first control for common training-side explanations. Changing the recipe does not reproduce the large gap in residual transferability, directing attention to how image and message information are combined inside the network.</p>
+
+      <div class="ruled-out" aria-label="Training-side factors ruled out as the primary cause of residual transferability">
+        <div class="ruled-label"><span>Controlled</span><strong>Training-side configurations</strong></div>
+        <div class="factor"><span>Training data</span><i>not predictive of RT</i></div>
+        <div class="factor"><span>Distortion layer</span><i>not predictive of RT</i></div>
+        <div class="factor"><span>Loss configuration</span><i>not predictive of RT</i></div>
+        <div class="factor"><span>Training progress</span><i>not predictive of RT</i></div>
+        <div class="not-cause"><b>≠</b><span>Primary cause<br>of the RT gap</span></div>
       </div>
-      <div class="takeaway"><span>Finding</span><p>Residual transferability is primarily an architectural failure of content binding—not simply a consequence of imperceptibility, payload size, or distortion training.</p></div>
+
+      <div class="architecture-conclusion">
+        <div class="conclusion-copy"><span>Architectural intervention</span><h3>Broadcasting the message changes residual transferability.</h3><p>Adding broadcast fusion to MBRS sharply lowers RT, while removing it from HiDDeN raises RT. The models still learn to decode during training; what changes is whether message information is forced to interact spatially with the image.</p></div>
+        <figure class="paper-figure architecture-figure"><img src="assets/broadcast_gap_analysis.png" alt="Paper analysis comparing residual transferability with and without message broadcasting, alongside training bit accuracy"><figcaption><b>Controlled architectural intervention.</b> Broadcast fusion, rather than training convergence, explains the change in RT.</figcaption></figure>
+      </div>
+      <div class="takeaway"><span>Conclusion</span><p>Content dependence is induced by architecture. Preserving local image–message interaction makes the learned residual less reusable across unrelated covers.</p></div>
     </section>
 
     <section class="paper-section shaded" id="coverlock">
