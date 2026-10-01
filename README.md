@@ -1,7 +1,14 @@
-# CoverLock
+<h1 align="center">CoverLock</h1>
 
-Official implementation of **CoverLock** from the paper
-[*Residual Transferability in Neural Image Watermarking*](https://arxiv.org/abs/2609.32241).
+<p align="center">
+  Official implementation for <em>Residual Transferability in Neural Image Watermarking</em>
+</p>
+
+<p align="center">
+  <a href="https://arxiv.org/abs/2609.32241"><img src="https://img.shields.io/badge/arXiv-2609.32241-b31b1b.svg" alt="arXiv"></a>
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB.svg?logo=python&amp;logoColor=white" alt="Python 3.10+">
+  <img src="https://img.shields.io/badge/PyTorch-2.1%2B-EE4C2C.svg?logo=pytorch&amp;logoColor=white" alt="PyTorch 2.1+">
+</p>
 
 CoverLock is a plug-and-play defense that binds a binary watermark payload to
 its cover image without modifying the watermark encoder or decoder. It derives
@@ -84,4 +91,18 @@ batch size of 256. These settings can be overridden when needed:
 ```bash
 GPU_IDS=0,1 NPROC=2 BATCH_SIZE=128 STEPS=200000 \
   bash scripts/train.sh s /path/to/training/images outputs/coverlock-s
+```
+
+## Citation
+
+```bibtex
+@misc{dong2026residual,
+  title         = {Residual Transferability in Neural Image Watermarking},
+  author        = {Dong, Ziping and Li, Qi and Wang, Xinchao},
+  year          = {2026},
+  eprint        = {2609.32241},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CR},
+  url           = {https://arxiv.org/abs/2609.32241}
+}
 ```
