@@ -7,6 +7,7 @@
 <p align="center">
   <a href="https://holdrain.github.io/Coverlock/"><img src="https://img.shields.io/badge/Project-Page-3558B7.svg" alt="Project Page"></a>
   <a href="https://arxiv.org/abs/2609.32241"><img src="https://img.shields.io/badge/arXiv-2609.32241-b31b1b.svg" alt="arXiv"></a>
+  <a href="https://huggingface.co/zipingdong123/Coverlock"><img src="https://img.shields.io/badge/%F0%9F%A4%97-Models-FFD21E.svg" alt="Hugging Face Models"></a>
   <a href="https://huggingface.co/papers/2609.32241"><img src="https://img.shields.io/badge/Hugging%20Face-Daily%20Papers-FFD21E.svg" alt="Hugging Face Daily Papers"></a>
   <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB.svg?logo=python&amp;logoColor=white" alt="Python 3.10+">
   <img src="https://img.shields.io/badge/PyTorch-2.1%2B-EE4C2C.svg?logo=pytorch&amp;logoColor=white" alt="PyTorch 2.1+">
