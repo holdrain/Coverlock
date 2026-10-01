@@ -75,8 +75,16 @@
       </div>
 
       <div class="architecture-conclusion">
-        <div class="conclusion-copy"><span>Architectural intervention</span><h3>Broadcasting the message changes residual transferability.</h3><p>Adding broadcast fusion to MBRS sharply lowers RT, while removing it from HiDDeN raises RT. The models still learn to decode during training; what changes is whether message information is forced to interact spatially with the image.</p></div>
-        <figure class="paper-figure architecture-figure"><img src="assets/broadcast_gap_analysis.png" alt="Paper analysis comparing residual transferability with and without message broadcasting, alongside training bit accuracy"><figcaption><b>Controlled architectural intervention.</b> Broadcast fusion, rather than training convergence, explains the change in RT.</figcaption></figure>
+        <div class="conclusion-copy">
+          <span>Architectural intervention</span>
+          <h3>Broadcasting the message changes residual transferability.</h3>
+          <p>Adding broadcast fusion to MBRS sharply lowers RT, while removing it from HiDDeN raises RT. What changes is whether message information is forced to interact spatially with the image.</p>
+          <div class="panel-reading">
+            <p><b>Left · RT@100</b><span>With broadcast, HiDDeN, MBRS, and CIN drop from near-perfect transferability to 0.21, 0.10, and 0.09.</span></p>
+            <p><b>Right · Training BitAcc</b><span>Broadcast slows learning, but the models still converge to high decoding accuracy as they see more images. The RT reduction is therefore not a failure to learn the watermark.</span></p>
+          </div>
+        </div>
+        <figure class="paper-figure architecture-figure"><img src="assets/broadcast_gap_analysis.png" alt="Paper analysis comparing residual transferability with and without message broadcasting, alongside training bit accuracy"><figcaption><b>Controlled architectural intervention.</b> Left: broadcast sharply reduces RT. Right: broadcast models learn more slowly but still reach high training BitAcc, ruling out under-training as the explanation.</figcaption></figure>
       </div>
       <div class="takeaway"><span>Conclusion</span><p>Content dependence is induced by architecture. Preserving local image–message interaction makes the learned residual less reusable across unrelated covers.</p></div>
     </section>
