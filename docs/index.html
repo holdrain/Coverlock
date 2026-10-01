@@ -7,242 +7,103 @@
   <title>Residual Transferability in Neural Image Watermarking</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body>
-  <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="CoverLock home">
-      <span class="brand-mark" aria-hidden="true">CL</span>
-      <span>CoverLock</span>
-    </a>
-    <nav aria-label="Primary navigation">
-      <a href="#findings">Findings</a>
-      <a href="#coverlock">Method</a>
-      <a href="#results">Results</a>
-      <a href="https://github.com/holdrain/coverlock">Code</a>
+  <header class="topbar">
+    <a href="#top" class="wordmark">CoverLock</a>
+    <nav aria-label="Page navigation">
+      <a href="#mechanism">Mechanism</a><a href="#findings">Findings</a><a href="#coverlock">CoverLock</a><a href="#results">Results</a>
     </nav>
   </header>
 
-  <main>
-    <section class="hero" aria-labelledby="paper-title">
-      <div class="hero-grid" aria-hidden="true"></div>
-      <div class="signal-field" aria-hidden="true">
-        <span class="signal signal-a">10110010</span>
-        <span class="signal signal-b">01101001</span>
-        <span class="signal signal-c">10110010</span>
-        <span class="signal signal-d">01101001</span>
+  <main id="top">
+    <section class="hero">
+      <p class="venue">Neural Image Watermarking · 2026</p>
+      <h1>Residual Transferability<br><span>in Neural Image Watermarking</span></h1>
+      <p class="tagline">Why can watermark residuals be transplanted to unrelated images—and how can we bind them back to image content?</p>
+      <p class="authors"><a href="#">Ziping Dong</a><sup>1</sup> · <a href="#">Qi Li</a><sup>1</sup> · <a href="#">Xinchao Wang</a><sup>1</sup></p>
+      <p class="affiliation"><sup>1</sup>National University of Singapore</p>
+      <div class="link-row" aria-label="Paper resources">
+        <a class="pill" href="https://arxiv.org/abs/2609.32241"><span class="icon">▤</span> Paper</a>
+        <a class="pill" href="https://github.com/holdrain/coverlock"><span class="icon">⌘</span> Code</a>
       </div>
-      <div class="hero-content">
-        <p class="eyebrow"><span></span> Neural watermark security</p>
-        <h1 id="paper-title">Residual Transferability<br>in Neural Image Watermarking</h1>
-        <p class="hero-lede">A watermark can leave its image behind and still be decoded elsewhere. We expose the architectural shortcut that makes this possible, then lock the payload back to its content.</p>
-        <p class="authors">Ziping Dong · Qi Li · Xinchao Wang<br><span>National University of Singapore</span></p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="https://arxiv.org/abs/2609.32241">Read the paper <span aria-hidden="true">↗</span></a>
-          <a class="button button-secondary" href="https://github.com/holdrain/coverlock">View code <span aria-hidden="true">↗</span></a>
+      <div class="hero-summary"><strong>TL;DR</strong><p>Some neural watermark models learn nearly image-independent residuals. An attacker can estimate that residual from a released image and transfer its identity to arbitrary content. Architectural content binding helps; <b>CoverLock</b> brings the same protection to already-trained watermark systems.</p></div>
+    </section>
+
+    <section class="paper-section" id="mechanism">
+      <div class="section-kicker">01 · Attack mechanism</div>
+      <h2>A watermark residual can leave its image behind.</h2>
+      <p class="lead">Let a released watermarked image be <i>y = x + r</i>. A residual-based forger estimates <i>r</i> and adds it to an unrelated target image <i>x′</i>. If the decoder recognizes the residual without checking the carrier content, <i>x′ + r</i> inherits the source watermark.</p>
+      <div class="mechanism" aria-label="Residual-transfer attack pipeline">
+        <div class="mechanism-item"><span class="step">1</span><div class="image-tile source-tile"><span>y = x + r</span></div><h3>Released image</h3><p>A valid watermarked image exposes both its visible content and a hidden message-bearing residual.</p></div>
+        <div class="operator"><span>estimate</span><b>r̂ = y − x̂</b><i>→</i></div>
+        <div class="mechanism-item"><span class="step">2</span><div class="image-tile residual-tile"><span>r̂</span></div><h3>Forgery residual</h3><p>The attacker isolates reusable watermark evidence; no access to the original encoder is required.</p></div>
+        <div class="operator"><span>transfer</span><b>y′ = x′ + r̂</b><i>→</i></div>
+        <div class="mechanism-item"><span class="step">3</span><div class="image-tile target-tile"><span>✓ decoded</span></div><h3>False attribution</h3><p>An unrelated image is accepted as carrying the source identity.</p></div>
+      </div>
+      <p class="figure-caption"><b>Residual transfer attack.</b> The attack succeeds when watermark evidence is portable across carrier images.</p>
+    </section>
+
+    <section class="paper-section shaded" id="findings">
+      <div class="section-kicker">02 · Why it happens</div>
+      <h2>The model may take a shortcut.</h2>
+      <p class="lead">A watermark encoder is asked to preserve a message, but is not necessarily required to make that message depend on the image. The easiest solution can be a consistent, cover-independent residual: different images receive similar patterns for the same payload.</p>
+      <div class="finding-layout">
+        <div class="finding-copy">
+          <div class="statement"><span>A</span><p><b>Same message, different images</b><br>The learned residuals remain strongly aligned.</p></div>
+          <div class="statement"><span>B</span><p><b>Average away the image content</b><br>Multi-image estimation exposes the shared component.</p></div>
+          <div class="statement"><span>C</span><p><b>Transfer the shared component</b><br>The decoder accepts it on a new carrier because it never learned a strong content dependency.</p></div>
         </div>
-      </div>
-      <div class="hero-proof" aria-label="Key results">
-        <div><strong>1.00</strong><span>RT in vulnerable systems</span></div>
-        <div><strong>&lt;0.25%</strong><span>average forgery success</span></div>
-        <div><strong>0</strong><span>watermark models retrained</span></div>
+        <figure class="paper-figure residual-paper-figure"><img src="assets/residual-comparison.png" alt="Paper visualization of four residual estimation methods: GT at one image, GT at 100 images, Yang et al., and WmForger"><figcaption>Forgery residuals estimated by different procedures. Their appearance changes, but all target the same transferable watermark evidence.</figcaption></figure>
       </div>
     </section>
 
-    <section class="transfer-section" aria-labelledby="transfer-title">
-      <div class="section-heading narrow">
-        <p class="section-index">01 / THE ATTACK</p>
-        <h2 id="transfer-title">The residual travels.<br>The attribution follows.</h2>
-        <p>Residual-based forgery extracts watermark evidence from a released image and adds it to unrelated content. If the decoder barely depends on the cover, the transplanted signal still verifies.</p>
+    <section class="paper-section" id="designs">
+      <div class="section-kicker">03 · Architectural evidence</div>
+      <h2>Two design choices reduce the shortcut.</h2>
+      <p class="lead">Controlled interventions show that residual transferability is not inevitable. The risk falls when the architecture forces the message to interact with local image content and when embedding adapts to each carrier.</p>
+      <div class="design-grid">
+        <article><div class="design-number">I</div><h3>Preserve spatial interaction</h3><p><b>Broadcast the message spatially and postpone global average pooling.</b> Local image features and message features continue interacting through the encoder instead of collapsing into a cover-independent global code.</p><div class="mini-diagram"><span>image features</span><i>×</i><span>message map</span><b>→ local fusion → GAP</b></div></article>
+        <article><div class="design-number">II</div><h3>Make embedding content-adaptive</h3><p><b>Let the carrier condition the embedding pattern.</b> The same message should produce different evidence on different images, making the residual harder to detach and reuse.</p><div class="mini-diagram"><span>same message</span><i>+</i><span>different image</span><b>→ different residual</b></div></article>
       </div>
-
-      <div class="transfer-demo" id="transfer-demo">
-        <div class="demo-stage stage-source">
-          <span class="stage-label">Released image</span>
-          <div class="synthetic-image landscape" aria-label="Stylized source image">
-            <span class="sun"></span><span class="ridge ridge-one"></span><span class="ridge ridge-two"></span>
-            <span class="watermark-dots"></span>
-          </div>
-          <span class="verification verified">Verified</span>
-        </div>
-        <div class="transfer-arrow" aria-hidden="true">
-          <span class="arrow-label">extract residual</span>
-          <span class="moving-bits">101101</span>
-          <span class="arrow-line"></span>
-        </div>
-        <div class="demo-stage stage-target">
-          <span class="stage-label">Unrelated target</span>
-          <div class="synthetic-image city" aria-label="Stylized target image">
-            <span class="building b-one"></span><span class="building b-two"></span><span class="building b-three"></span>
-          </div>
-          <span class="verification neutral">No watermark</span>
-        </div>
-        <button class="forge-button" id="forge-button" type="button">
-          <span class="button-state idle-state">Transfer residual</span>
-          <span class="button-state forged-state">Reset demo</span>
-        </button>
-        <div class="demo-result" aria-live="polite">
-          <span class="result-label">Target after transfer</span>
-          <strong>False attribution</strong>
-          <span>The unrelated image now decodes as the source.</span>
-        </div>
-      </div>
+      <div class="takeaway"><span>Finding</span><p>Residual transferability is primarily an architectural failure of content binding—not simply a consequence of imperceptibility, payload size, or distortion training.</p></div>
     </section>
 
-    <section class="findings-section" id="findings" aria-labelledby="findings-title">
-      <div class="section-heading">
-        <p class="section-index">02 / WHAT WE FOUND</p>
-        <h2 id="findings-title">The vulnerability is architectural.</h2>
-        <p>Common training choices do not explain the enormous gap in transferability. The decisive difference is whether the network learns to keep watermark evidence coupled to image content.</p>
-      </div>
-
-      <div class="rt-comparison" aria-label="Residual transferability comparison">
-        <div class="rt-row high">
-          <span>CIN</span><div class="rt-track"><i style="--rt:100%"></i></div><strong>1.00</strong>
-        </div>
-        <div class="rt-row high">
-          <span>VINE</span><div class="rt-track"><i style="--rt:99%"></i></div><strong>0.99</strong>
-        </div>
-        <div class="rt-row high">
-          <span>MBRS</span><div class="rt-track"><i style="--rt:98%"></i></div><strong>0.98</strong>
-        </div>
-        <div class="rt-divider"><span>same objective family, radically different behavior</span></div>
-        <div class="rt-row low">
-          <span>HiDDeN</span><div class="rt-track"><i style="--rt:28%"></i></div><strong>0.28</strong>
-        </div>
-        <div class="rt-row low">
-          <span>RivaGAN</span><div class="rt-track"><i style="--rt:8%"></i></div><strong>0.08</strong>
-        </div>
-      </div>
-
-      <div class="finding-grid">
-        <article>
-          <span class="finding-number">01</span>
-          <h3>A cover-independent shortcut</h3>
-          <p>High-RT systems learn watermark evidence that survives across unrelated images. Their decoders respond more to the message than to the image carrying it.</p>
-        </article>
-        <article>
-          <span class="finding-number">02</span>
-          <h3>Broadcast–GAP binds locally</h3>
-          <p>Keeping spatial image–message interaction through the encoder and delaying global pooling sharply reduces residual transfer.</p>
-        </article>
-        <article>
-          <span class="finding-number">03</span>
-          <h3>Content adaptivity matters</h3>
-          <p>When embedding patterns adapt to the input image, watermark evidence becomes harder to detach and reuse on a new carrier.</p>
-        </article>
-      </div>
+    <section class="paper-section shaded" id="coverlock">
+      <div class="section-kicker">04 · Protecting existing models</div>
+      <h2>CoverLock binds the payload to the carrier.</h2>
+      <p class="lead">Redesigning an encoder helps future models, but deployed watermark systems already exist. CoverLock is a plug-in wrapper: it derives a stable image-conditioned bit mask and XORs it with the user message before watermark encoding.</p>
+      <div class="equations"><div><span>Embedding</span><strong>p = m ⊕ b(x)</strong></div><div><span>Detection</span><strong>m̂ = D(ỹ) ⊕ b(ỹ)</strong></div></div>
+      <figure class="paper-figure method-figure"><img src="assets/coverlock.png" alt="Original paper figure showing CoverLock training, code regularization, and plug-in watermark encoding and decoding"><figcaption><b>CoverLock overview from the paper.</b> A frozen DINO backbone and lightweight trainable adaptor learn a distortion-stable, diverse content code. At inference time, the pretrained watermark encoder and decoder remain frozen and unmodified.</figcaption></figure>
+      <div class="feature-row"><div><b>Watermark-agnostic</b><span>trained without a watermark codec</span></div><div><b>Plug-and-play</b><span>works with existing encoders and decoders</span></div><div><b>Content-bound</b><span>the same message maps to carrier-specific payloads</span></div></div>
     </section>
 
-    <section class="evidence-section" aria-labelledby="evidence-title">
-      <div class="evidence-copy">
-        <p class="section-index">03 / ONE ATTACK, MANY FINGERPRINTS</p>
-        <h2 id="evidence-title">Forgery residuals do not have one look.</h2>
-        <p>Residual patterns change with the estimation procedure and source count. A detector trained to recognize one attack artifact can miss the next one. Content binding attacks the transferable signal itself.</p>
-        <p class="annotation"><span></span> Amplified residuals from MBRS; visualization scales are normalized for inspection.</p>
+    <section class="paper-section" id="results">
+      <div class="section-kicker">05 · Results</div>
+      <h2>Transferred residuals stop verifying.</h2>
+      <p class="lead">Across CIN, MBRS, and VINE; three datasets; and multiple residual estimators, CoverLock suppresses forgery while retaining useful robustness under common image distortions.</p>
+      <div class="result-grid"><div><strong>0.243%</strong><span>GT@1 average attack success</span></div><div><strong>0.015%</strong><span>Yang et al. average attack success</span></div><div><strong>0.059%</strong><span>WmForger average attack success</span></div></div>
+      <div class="robustness-table" role="table" aria-label="Average bit accuracy under six distortions on COCO">
+        <div class="table-head" role="row"><span>Watermark model</span><span>Average BitAcc with CoverLock</span></div>
+        <div role="row"><b>CIN</b><span><i style="--width:94.6%"></i><strong>94.60%</strong></span></div>
+        <div role="row"><b>MBRS</b><span><i style="--width:89.4%"></i><strong>89.40%</strong></span></div>
+        <div role="row"><b>VINE</b><span><i style="--width:87.75%"></i><strong>87.75%</strong></span></div>
       </div>
-      <figure class="residual-figure">
-        <img src="assets/residual-comparison.png" alt="Residual patterns produced by GT at one image, GT at 100 images, Yang et al., and WmForger">
-        <figcaption>Same watermark system. Four visibly different residual signatures.</figcaption>
-      </figure>
+      <p class="figure-caption">Average bit accuracy under Gaussian noise, brightness, blur, JPEG, contrast, and crop on COCO.</p>
     </section>
 
-    <section class="coverlock-section" id="coverlock" aria-labelledby="coverlock-title">
-      <div class="coverlock-intro">
-        <div>
-          <p class="section-index">04 / THE PLUG-IN DEFENSE</p>
-          <h2 id="coverlock-title">Lock the message<br>to the image.</h2>
-        </div>
-        <p>CoverLock derives a distortion-stable, image-conditioned code from frozen DINOv2 features. XOR wrapping makes the same user message become a different payload for every carrier image.</p>
-      </div>
-
-      <div class="equation-strip" aria-label="CoverLock message wrapping equations">
-        <div><span>ENCODE</span><strong>p = m ⊕ b(x)</strong></div>
-        <i aria-hidden="true"></i>
-        <div><span>DECODE</span><strong>m̂ = D(ỹ) ⊕ b(ỹ)</strong></div>
-      </div>
-
-      <figure class="method-figure">
-        <img src="assets/coverlock-overview.png" alt="CoverLock training and plug-in watermark encoding and decoding overview">
-        <figcaption>Watermark-agnostic training above; drop-in encoding and detection below.</figcaption>
-      </figure>
-
-      <div class="method-facts">
-        <div><strong>Frozen</strong><span>DINOv2 backbone</span></div>
-        <div><strong>Independent</strong><span>of watermark training</span></div>
-        <div><strong>Compatible</strong><span>with existing codecs</span></div>
-        <div><strong>Attack-free</strong><span>contrastive training</span></div>
-      </div>
-    </section>
-
-    <section class="results-section" id="results" aria-labelledby="results-title">
-      <div class="results-heading">
-        <p class="section-index">05 / RESULTS</p>
-        <h2 id="results-title">The forgery stops traveling.</h2>
-        <p>Across CIN, MBRS, and VINE; COCO, ImageNet, and DIV2K; and three residual-based attacks, CoverLock keeps average attack success below 0.25%.</p>
-      </div>
-
-      <div class="asr-grid">
-        <article>
-          <span>GT@1</span>
-          <strong data-count="0.243">0.243%</strong>
-          <p>Average attack success rate</p>
-        </article>
-        <article>
-          <span>Yang et al.</span>
-          <strong data-count="0.015">0.015%</strong>
-          <p>Average attack success rate</p>
-        </article>
-        <article>
-          <span>WmForger</span>
-          <strong data-count="0.059">0.059%</strong>
-          <p>Average attack success rate</p>
-        </article>
-      </div>
-
-      <div class="robustness-row">
-        <div class="robustness-copy">
-          <h3>Security without throwing robustness away.</h3>
-          <p>Average bit accuracy under six image distortions on COCO. CoverLock consistently outperforms traditional media-hash binding.</p>
-        </div>
-        <div class="robustness-bars">
-          <div><span>CIN</span><i style="--score:94.6%"></i><strong>94.60</strong></div>
-          <div><span>MBRS</span><i style="--score:89.4%"></i><strong>89.40</strong></div>
-          <div><span>VINE</span><i style="--score:87.75%"></i><strong>87.75</strong></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="paper-section" aria-labelledby="paper-section-title">
-      <p class="section-index">06 / READ & REPRODUCE</p>
-      <h2 id="paper-section-title">Build on the finding.</h2>
-      <p>The paper contains the full RT protocol, controlled architectural interventions, security calibration, and cross-dataset evaluation.</p>
-      <div class="paper-actions">
-        <a class="button button-primary" href="https://arxiv.org/abs/2609.32241">Paper <span aria-hidden="true">↗</span></a>
-        <a class="button button-secondary" href="https://github.com/holdrain/coverlock">GitHub <span aria-hidden="true">↗</span></a>
-      </div>
-      <div class="bibtex-block">
-        <div class="bibtex-top"><span>BibTeX</span><button id="copy-bibtex" type="button">Copy citation</button></div>
-        <pre id="bibtex"><code>@misc{dong2026residual,
+    <section class="citation-section"><h2>Citation</h2><div class="bibtex-block"><button id="copy-bibtex" type="button">Copy BibTeX</button><pre id="bibtex"><code>@misc{dong2026residual,
   title         = {Residual Transferability in Neural Image Watermarking},
   author        = {Dong, Ziping and Li, Qi and Wang, Xinchao},
   year          = {2026},
   eprint        = {2609.32241},
   archivePrefix = {arXiv},
-  primaryClass  = {cs.CR},
-  url           = {https://arxiv.org/abs/2609.32241}
-}</code></pre>
-      </div>
-    </section>
+  primaryClass  = {cs.CR}
+}</code></pre></div></section>
   </main>
-
-  <footer>
-    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">CL</span><span>CoverLock</span></a>
-    <p>Ziping Dong · Qi Li · Xinchao Wang</p>
-    <p>National University of Singapore · 2026</p>
-  </footer>
-
-  <script src="script.js?v=1"></script>
+  <footer><p>Residual Transferability in Neural Image Watermarking</p><p>National University of Singapore · 2026</p></footer>
+  <script src="script.js?v=2"></script>
 </body>
 </html>
